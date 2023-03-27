@@ -12,8 +12,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.nio.charset.Charset;
 import java.util.Optional;
+
 @Service
 public class UsuarioService {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -27,6 +29,7 @@ public class UsuarioService {
         return Optional.of(usuarioRepository.save(usuario));
 
     }
+
     public Optional<Usuario> atualizarUsuario(Usuario usuario) {
 
         if(usuarioRepository.findById(usuario.getId()).isPresent()) {
@@ -93,6 +96,4 @@ public class UsuarioService {
         return "Basic " + new String(tokenBase64);
 
     }
-
-
 }

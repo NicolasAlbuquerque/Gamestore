@@ -27,9 +27,6 @@ public class Usuario {
     @Size(max= 5000, message = "O link da imagem não pode ser maior que 5000")
     private String foto;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties("usuario")
-    private List<Produto> produto;
 
     public Long getId() {
         return id;
@@ -71,11 +68,5 @@ public class Usuario {
         this.foto = foto;
     }
 
-    public List<Produto> getProduto() {
-        return produto;
-    }
 
-    public void setProduto(List<Produto> produto) {
-        this.produto = produto;
     }
-}
