@@ -2,8 +2,9 @@ package com.generation.games.repository;
 
 import com.generation.games.model.Usuario;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UsuarioRepositoryTest {
-    private UsuarioRepository usuarioRepository;
+     @Autowired
+     private UsuarioRepository usuarioRepository;
 
     @BeforeAll
     void start(){
@@ -46,8 +48,8 @@ public class UsuarioRepositoryTest {
         List<Usuario> listaDeUsuarios = usuarioRepository.findAllByNomeContainingIgnoreCase("Albuquerque");
         assertEquals(3, listaDeUsuarios.size());
         assertTrue(listaDeUsuarios.get(0).getNome().equals("Ariane Albuquerque"));
-        assertTrue(listaDeUsuarios.get(0).getNome().equals("Valdir Albuquerque"));
-        assertTrue(listaDeUsuarios.get(0).getNome().equals("Elisabett Albuquerque"));
+        assertTrue(listaDeUsuarios.get(1).getNome().equals("Valdir Albuquerque"));
+        assertTrue(listaDeUsuarios.get(2).getNome().equals("Elisabett Albuquerque"));
     }
 
     @AfterAll
