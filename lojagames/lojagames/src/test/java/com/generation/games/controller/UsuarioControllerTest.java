@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,6 +66,27 @@ public class UsuarioControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, corpoResposta.getStatusCode());
     }
+
+    @Test
+    @DisplayName("Atualizar um Usuário.")
+    public void deveAtualizarUmUsuario(){
+
+        Optional<Usuario> usuarioCadastrado = usuarioService.cadastrarUsuario(new Usuario(0L, "Horacio Doguinho","horacio_dog@email.com.br", "123445678","hhtp://i.imgur.com.T12NIp9.jpg"));
+
+        Usuario usuarioUpdate = new Usuario(usuarioCadastrado.get().getId(),
+                "Horacitto doguitto", "horacitto_dogguitto@email.com", "horacio2", "hhtp://i.imgur.com.T12NIp9.jpg");
+
+        HttpEntity<Usuario> corpoRequisicao = new HttpEntity<Usuario>(usuarioUpdate);
+
+        ResponseEntity<Usuario> corpoResposta = testRestTemplate
+                .withBasicAuth("root@root.com", "rootroot")
+                .exchange("/usuarios/atualizar", HttpMethod.PUT, corpoRequisicao, Usuario.class);
+
+        assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
+        assertEquals(corpoRequisicao.getBody().getNome(), corpoResposta.getBody().getNome());
+        assertEquals(corpoRequisicao.getBody().getUsuario(),corpoResposta.getBody().getUsuario());
+    }
+
 
 
 }
