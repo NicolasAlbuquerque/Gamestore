@@ -43,12 +43,12 @@ public class UsuarioControllerTest {
 
     @Test
     @DisplayName("Cadastrar um Usuario")
-    public void deveCriarUmUsuario(){
+    public void deveCriarUmUsuario() {
 
-        HttpEntity<Usuario> corpoRequisicao =new HttpEntity<Usuario>(new Usuario(0L,"Nicolas Albuquerque","nicolas_albuquerque@email.com.br","12345678", "http://i.imgur.com/JR7kUFU.jpg"));
+        HttpEntity<Usuario> corpoRequisicao = new HttpEntity<Usuario>(new Usuario(0L, "Nicolas Albuquerque", "nicolas_albuquerque@email.com.br", "12345678", "http://i.imgur.com/JR7kUFU.jpg"));
 
-        ResponseEntity<Usuario> corpoResposta= testRestTemplate
-                .exchange("/usuarios/cadastrar", HttpMethod.POST,corpoRequisicao, Usuario.class);
+        ResponseEntity<Usuario> corpoResposta = testRestTemplate
+                .exchange("/usuarios/cadastrar", HttpMethod.POST, corpoRequisicao, Usuario.class);
         assertEquals(HttpStatus.CREATED, corpoResposta.getStatusCode());
         assertEquals(corpoRequisicao.getBody().getNome(), corpoResposta.getBody().getNome());
         assertEquals(corpoRequisicao.getBody().getUsuario(), corpoResposta.getBody().getUsuario());
@@ -56,10 +56,10 @@ public class UsuarioControllerTest {
 
     @Test
     @DisplayName("Não deve permitir a duplicação do usuário")
-    public void naoDeveDuplicarUsuario(){
-        usuarioService.cadastrarUsuario(new Usuario(0L,"Maria Edilma","maria_edilma@email.com.br","12345678", "hhtp://i.imgur.com.T12NIp9.jpg"));
+    public void naoDeveDuplicarUsuario() {
+        usuarioService.cadastrarUsuario(new Usuario(0L, "Maria Edilma", "maria_edilma@email.com.br", "12345678", "hhtp://i.imgur.com.T12NIp9.jpg"));
 
-        HttpEntity<Usuario> corpoRequisicao = new HttpEntity<Usuario>(new Usuario(0L,"Maria Edilma","maria_edilma@email.com.br","12345678","hhtp://i.imgur.com.T12NIp9.jpg"));
+        HttpEntity<Usuario> corpoRequisicao = new HttpEntity<Usuario>(new Usuario(0L, "Maria Edilma", "maria_edilma@email.com.br", "12345678", "hhtp://i.imgur.com.T12NIp9.jpg"));
 
         ResponseEntity<Usuario> corpoResposta = testRestTemplate
                 .exchange("/usuarios/cadastrar", HttpMethod.POST, corpoRequisicao, Usuario.class);
@@ -69,9 +69,9 @@ public class UsuarioControllerTest {
 
     @Test
     @DisplayName("Atualizar um Usuário.")
-    public void deveAtualizarUmUsuario(){
+    public void deveAtualizarUmUsuario() {
 
-        Optional<Usuario> usuarioCadastrado = usuarioService.cadastrarUsuario(new Usuario(0L, "Horacio Doguinho","horacio_dog@email.com.br", "123445678","hhtp://i.imgur.com.T12NIp9.jpg"));
+        Optional<Usuario> usuarioCadastrado = usuarioService.cadastrarUsuario(new Usuario(0L, "Horacio Doguinho", "horacio_dog@email.com.br", "123445678", "hhtp://i.imgur.com.T12NIp9.jpg"));
 
         Usuario usuarioUpdate = new Usuario(usuarioCadastrado.get().getId(),
                 "Horacitto doguitto", "horacitto_dogguitto@email.com", "horacio2", "hhtp://i.imgur.com.T12NIp9.jpg");
@@ -84,9 +84,20 @@ public class UsuarioControllerTest {
 
         assertEquals(HttpStatus.OK, corpoResposta.getStatusCode());
         assertEquals(corpoRequisicao.getBody().getNome(), corpoResposta.getBody().getNome());
-        assertEquals(corpoRequisicao.getBody().getUsuario(),corpoResposta.getBody().getUsuario());
+        assertEquals(corpoRequisicao.getBody().getUsuario(), corpoResposta.getBody().getUsuario());
     }
 
+    @Test
+    @DisplayName("Listar todos os Usuarios")
+    public void deveMostrarTodosUsuarios(){
 
+        usuarioService.cadastrarUsuario(new Usuario(0L, "Teobaldo gatito", "teobaldo_felino@email.com.br","12345678", "hhtp://i.imgur.com.T12NIp9.jpg"));
 
+        usuarioService.cadastrarUsuario(new Usuario(0L,"Coockie Cadelinha", "coockie_cadelinha@email.com.br", "12345678","hhtp://i.imgur.com.T12NIp9.jpg"));
+
+        ResponseEntity<String> resposta = testRestTemplate
+                .withBasicAuth("root@root.com", "rootroot")
+                    .exchange("/usuarios/all", HttpMethod.GET, null, String.class);
+        assertEquals(HttpStatus.OK, resposta.getStatusCode());
+    }
 }
