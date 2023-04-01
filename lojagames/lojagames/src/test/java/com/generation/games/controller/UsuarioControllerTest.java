@@ -53,7 +53,18 @@ public class UsuarioControllerTest {
         assertEquals(corpoRequisicao.getBody().getUsuario(), corpoResposta.getBody().getUsuario());
     }
 
-    
+    @Test
+    @DisplayName("Não deve permitir a duplicação do usuário")
+    public void naoDeveDuplicarUsuario(){
+        usuarioService.cadastrarUsuario(new Usuario(0L,"Maria Edilma","maria_edilma@email.com.br","12345678", "hhtp://i.imgur.com.T12NIp9.jpg"));
+
+        HttpEntity<Usuario> corpoRequisicao = new HttpEntity<Usuario>(new Usuario(0L,"Maria Edilma","maria_edilma@email.com.br","12345678","hhtp://i.imgur.com.T12NIp9.jpg"));
+
+        ResponseEntity<Usuario> corpoResposta = testRestTemplate
+                .exchange("/usuarios/cadastrar", HttpMethod.POST, corpoRequisicao, Usuario.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, corpoResposta.getStatusCode());
+    }
 
 
 }
